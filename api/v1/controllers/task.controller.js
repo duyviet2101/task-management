@@ -99,7 +99,14 @@ module.exports.changeMulti = async (req, res) => {
     const value = req.body.value
 
     const objectUpdate = {}
-    objectUpdate[key] = value
+
+    if (key === 'deleted') {
+      objectUpdate.deleted = true
+      objectUpdate.deletedAt = new Date()
+    } else {
+      objectUpdate[key] = value
+    }
+
 
     const tasks = await Task.updateMany({
       _id: {
@@ -111,12 +118,12 @@ module.exports.changeMulti = async (req, res) => {
     if (tasks.acknowledged) {
       res.json({
         code: 200,
-        message: "Cập nhật trạng thái thành công!"
+        message: "Cập nhật thành công!"
       })
     } else {
       res.json({
         code: 400,
-        message: "Cập nhật trạng thái thất bại!"
+        message: "Cập nhật thất bại!"
       })
     }
   } catch (error) {
@@ -174,6 +181,35 @@ module.exports.edit = async (req, res) => {
       res.json({
         code: 400,
         message: "Cập nhật thất bại!"
+      })
+    }
+  } catch (error) {
+    res.json(error)
+  }
+}
+
+// DELETE /api/v1/tasks/delete/:id
+module.exports.delete = async (req, res) => {
+  try {
+    const id = req.params.id
+
+    const task = await Task.findOneAndUpdate({
+      _id: id,
+      deleted: false 
+    }, {
+      deleted: true,
+      deletedAt: new Date()
+    })
+
+    if (task) {
+      res.json({
+        code: 200,
+        message: "Xóa thành công!"
+      })
+    } else {
+      res.json({
+        code: 400,
+        message: "Xóa thất bại!"
       })
     }
   } catch (error) {
