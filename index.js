@@ -9,6 +9,10 @@ const port = process.env.PORT || 3000
 
 database.connect();
 
+//? config bodyparse
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
+
 // Routes V1
 routesApiVer1(app)
 
