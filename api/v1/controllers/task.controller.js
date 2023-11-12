@@ -123,3 +123,31 @@ module.exports.changeMulti = async (req, res) => {
     res.json(error)
   }
 }
+
+// POST /api/v1/tasks/create
+module.exports.create = async (req, res) => {
+  try {
+    const task = await Task.create({
+      title: req.body.title,
+      status: req.body.status,
+      content: req.body.content,
+      timeStart: req.body.timeStart,
+      timeFinish: req.body.timeFinish,
+    })
+
+    if (task) {
+      res.json({
+        code: 200,
+        message: "Thêm mới thành công!",
+        data: task
+      })
+    } else {
+      res.json({
+        code: 400,
+        message: "Thêm mới thất bại!"
+      })
+    }
+  } catch (error) {
+    res.json(error)
+  }
+}
