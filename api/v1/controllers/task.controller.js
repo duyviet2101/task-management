@@ -90,3 +90,36 @@ module.exports.changeStatus = async (req, res) => {
     res.json(error)
   }
 }
+
+// PATCH /api/v1/tasks/change-multi
+module.exports.changeMulti = async (req, res) => {
+  try {
+    const ids = req.body.ids
+    const key = req.body.key
+    const value = req.body.value
+
+    const objectUpdate = {}
+    objectUpdate[key] = value
+
+    const tasks = await Task.updateMany({
+      _id: {
+        $in: ids
+      },
+      deleted: false 
+    },objectUpdate)
+
+    if (tasks.acknowledged) {
+      res.json({
+        code: 200,
+        message: "Cập nhật trạng thái thành công!"
+      })
+    } else {
+      res.json({
+        code: 400,
+        message: "Cập nhật trạng thái thất bại!"
+      })
+    }
+  } catch (error) {
+    res.json(error)
+  }
+}
