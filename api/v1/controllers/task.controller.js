@@ -151,3 +151,32 @@ module.exports.create = async (req, res) => {
     res.json(error)
   }
 }
+
+// PATCH /api/v1/tasks/edit/:id
+module.exports.edit = async (req, res) => {
+  try {
+    const id = req.params.id
+
+    const task = await Task.findOneAndUpdate({
+      _id: id,
+      deleted: false 
+    }, req.body, {
+      new: true
+    })
+
+    if (task) {
+      res.json({
+        code: 200,
+        message: "Cập nhật thành công!",
+        data: task
+      })
+    } else {
+      res.json({
+        code: 400,
+        message: "Cập nhật thất bại!"
+      })
+    }
+  } catch (error) {
+    res.json(error)
+  }
+}
