@@ -165,3 +165,38 @@ module.exports.otpPassword = async (req, res) => {
     })
   }
 }
+
+//  POST /api/v1/users/password/reset
+module.exports.resetPassword = async (req, res) => {
+try {
+  const token = req.body.token
+  const password = (req.body.password)
+
+  const user = await User.findOne({
+    token: token,
+    deleted: false
+  })
+
+  if (md5(password) == user.password) {
+    return res.json({
+      code: 400,
+      message: 'Password same old password'
+    })
+  }
+
+  await User.findOneAndUpdate({
+    token: token,
+  }, {
+    password: md5(password)
+  })
+
+  res.json({
+    code: 200,
+    message: 'Reset password success'
+  })
+} catch (error) {
+  res.json({
+    code: 404
+  })
+}
+}
