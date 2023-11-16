@@ -128,3 +128,40 @@ module.exports.forgotPassword = async (req, res) => {
     })
   }
 }
+
+//  POST /api/v1/users/password/otp
+module.exports.otpPassword = async (req, res) => {
+  try {
+    const email = req.body.email
+    const otp = req.body.otp
+  
+    const result = await ForgotPassword.findOne({
+      email: email,
+      otp: otp
+    })
+  
+    if (!result) {
+      return res.json({
+        code: 404,
+        message: 'OTP invalid'
+      })
+    }
+  
+    const user = await User.findOne({
+      email: email,
+      deleted: false
+    })
+    const token = user.token;
+    res.cookie('token', token);
+  
+    return res.json({
+      code: 200,
+      message: 'Authentication success',
+      token: token
+    })
+  } catch (error) {
+    return res.json({
+      code: 404
+    })
+  }
+}
