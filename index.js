@@ -2,6 +2,7 @@ const express = require('express')
 const database = require('./config/database.js')
 require('dotenv').config()
 const cors = require('cors')
+const cookieParser = require('cookie-parser')
 
 const routesApiVer1 = require('./api/v1/routes/index.route.js')
 
@@ -11,6 +12,8 @@ const port = process.env.PORT || 3000
 app.use(cors())
 
 database.connect();
+
+app.use(cookieParser())
 
 //? config bodyparse
 app.use(express.json())
