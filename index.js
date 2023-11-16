@@ -1,11 +1,14 @@
 const express = require('express')
 const database = require('./config/database.js')
 require('dotenv').config()
+const cors = require('cors')
 
 const routesApiVer1 = require('./api/v1/routes/index.route.js')
 
 const app = express()
 const port = process.env.PORT || 3000
+
+app.use(cors())
 
 database.connect();
 
