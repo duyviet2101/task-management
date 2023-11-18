@@ -11,7 +11,8 @@ const taskSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
-  deletedAt: Date
+  deletedAt: Date,
+  createdBy: String
 })
 
 const Task = mongoose.model('Task', taskSchema, 'tasks')
