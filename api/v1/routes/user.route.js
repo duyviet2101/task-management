@@ -3,6 +3,8 @@ const router = express.Router()
 
 const controller = require('../controllers/user.controller.js')
 
+const authMiddleware = require('../middlewares/auth.middleware.js')
+
 router.post('/register', controller.register)
 
 router.post('/login', controller.login)
@@ -13,6 +15,6 @@ router.post('/password/otp', controller.otpPassword)
 
 router.post('/password/reset', controller.resetPassword)
 
-router.get('/detail', controller.detail)
+router.get('/detail', authMiddleware.requestAuth, controller.detail)
 
 module.exports = router

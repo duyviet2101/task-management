@@ -205,17 +205,10 @@ try {
 //  GET /api/v1/users/detail
 module.exports.detail = async (req, res) => {
   try {
-    const token = req.cookies.token
-  
-    const user = await User.findOne({
-      token: token,
-      deleted: false
-    }).select('-password -token -deleted')
-  
     res.json({
       code: 200,
       message: 'oke',
-      info: user
+      info: req.user
     })
   } catch (error) {
     return res.json({
