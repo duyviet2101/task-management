@@ -216,3 +216,21 @@ module.exports.detail = async (req, res) => {
     })
   }
 }
+
+//  GET /api/v1/users/list
+module.exports.list = async (req, res) => {
+  try {
+    const users = await User.find({deleted: false}).select("fullName email")
+
+    res.json({
+      code: 200,
+      message: 'oke',
+      users: users
+    })
+  } catch (error) {
+    res.json({
+      code: 404,
+      message: error
+    })
+  }
+}
