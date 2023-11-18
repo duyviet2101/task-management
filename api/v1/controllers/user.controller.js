@@ -22,6 +22,7 @@ module.exports.register = async (req, res) => {
       })
     }
 
+    req.body.token = generateHelper.generateRandomString(30)
     const user = await User.create(req.body)
     
     const token = user.token;
